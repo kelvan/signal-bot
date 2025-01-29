@@ -2,7 +2,9 @@
 name = "signal-bot"
 version = "0.1.0"
 description = "Simple bot connecting signal to an ollama chatbot"
-authors = ["Florian Schweiker <kelvan@ist-total.org>"]
+authors = [
+    {name = "Florian Schweikert", email = "kelvan@ist-total.org"},
+]
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
