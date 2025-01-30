@@ -13,7 +13,7 @@ class BotCommand(Command):
             if msg and msg.lower().replace(",", "").startswith(personality.trigger):
                 response = await relay_message_to_ollama(msg, personality.model, personality.instructions)
                 await c.start_typing()
-                await c.send(response)
+                await c.reply(response)
                 await c.stop_typing()
 
 
