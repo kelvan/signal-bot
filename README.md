@@ -23,19 +23,13 @@
 
     Follow the instructions in the [ollama repository](https://github.com/ollama/ollama) to set up the service.
 
-5. **Configure the `.env` File**
+5. **Create config file**
 
-    Create a `.env` file in the root directory of the project and add the necessary configuration variables.
-
-    ```env
-    SIGNAL_NUMBER=<your phone number>
-    # optional
-    OLLAMA_MODEL=<defaults to llama3.2>
-    SIGNAL_SERVICE=<defaults to localhost:8080>
-    OLLAMA_HOST=<defaults to 127.0.0.1:11434>
-    OLLAMA_CONTEXT=<some custom instruction on how the bot should behave>
-    BOT_WAKE_WORD=<some wake words the bot should listen to>
+    ```sh
+    cp config.yml.example config.yml
     ```
+
+    Edit `config.yml` to configure your bot settings, such as personalities, Signal service details, and Ollama configuration.
 
 ## Running the Bot
 

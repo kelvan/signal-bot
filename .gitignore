@@ -13,3 +13,4 @@ wheels/
 
 signal-cli-config/
 .env
+config.yml

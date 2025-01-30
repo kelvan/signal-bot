@@ -1,15 +1,17 @@
+from typing import cast
+
 import aiohttp
 
-from .config import OllamaConfig
+from .config import AppConfig
 
-ollama_config = OllamaConfig()
+config = AppConfig()
 
 
-async def relay_message_to_ollama(message: str, context: str = "") -> str:
-    url = f"http://{ollama_config.host}/api/generate/"
+async def relay_message_to_ollama(message: str, model: str, instructions: str = "") -> str:
+    url = f"http://{config.ollama.host}/api/generate/"
     payload = {
-        "model": ollama_config.model,
-        "prompt": f"{context}\n{message}",
+        "model": model,
+        "prompt": f"{instructions}\n{message}",
         "stream": False,
     }
     headers = {"Content-Type": "application/json"}
@@ -19,13 +21,16 @@ async def relay_message_to_ollama(message: str, context: str = "") -> str:
             response.raise_for_status()
             data = await response.json()
 
-    return data.get("response", "")
+    return cast(str, data.get("response", ""))
 
 
 # Example usage
 if __name__ == "__main__":
     import asyncio
 
-    message = "Why is the sky blue?"
-    response = asyncio.run(relay_message_to_ollama(message, ollama_config.context))
-    print(response)
+    for personality in config.bot.personalities:
+        print(f"You: {personality.example_question}\n")  # noqa: T201
+        response = asyncio.run(
+            relay_message_to_ollama(personality.example_question, personality.model, personality.instructions)
+        )
+        print(f"{personality.name}: {response}\n{'#' * 80}\n")  # noqa: T201

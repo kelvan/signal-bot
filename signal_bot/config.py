@@ -1,22 +1,38 @@
-from confz import BaseConfig, EnvSource
+from typing import ClassVar
+
+from confz import BaseConfig, ConfigSource, FileSource
+from pydantic import BaseModel
 
 
-class BotConfig(BaseConfig):
-    wake_word: str = "hey ollama"
+class PersonalityConfig(BaseModel):
+    trigger: str = "hey ollama"
+    name: str = "Ollama"
+    model: str = "llama3.2"
+    instructions: str = """
+        You are a Signal AI bot.
+        You generate chat replies based on the prompt you receive.
+        Keep your responses short, relevant and respectful.
+    """
+    example_question: str = "Why is the sky blue?"
 
-    CONFIG_SOURCES = [EnvSource(file=".env", prefix="BOT_", allow_all=True)]
+
+class BotConfig(BaseModel):
+    personalities: list[PersonalityConfig] = [PersonalityConfig()]
 
 
-class SignalConfig(BaseConfig):
+class SignalConfig(BaseModel):
     number: str
     service: str = "127.0.0.1:8080"
 
-    CONFIG_SOURCES = [EnvSource(file=".env", prefix="SIGNAL_", allow_all=True)]
 
-
-class OllamaConfig(BaseConfig):
+class OllamaConfig(BaseModel):
     host: str = "127.0.0.1:11434"
-    model: str = "llama3.2"
     context: str = ""
 
-    CONFIG_SOURCES = [EnvSource(file=".env", prefix="OLLAMA_", allow_all=True)]
+
+class AppConfig(BaseConfig):
+    bot: BotConfig
+    signal: SignalConfig
+    ollama: OllamaConfig
+
+    CONFIG_SOURCES: ClassVar[list[ConfigSource]] = [FileSource(file="config.yml")]

@@ -29,6 +29,7 @@ exclude = [
     "dist",
     "build",
     ".mypy_cache",
+    "signal-cli-config",
 ]
 line-length = 120
 target-version = "py312"
@@ -44,4 +45,4 @@ python_version = "3.12"
 warn_return_any = true
 warn_unused_configs = true
 show_error_codes = true
-exclude = ["env", "venv", ".venv"]
+exclude = ["env", "venv", ".venv", "signal-cli-config"]
