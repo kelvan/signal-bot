@@ -8,9 +8,21 @@ config = AppConfig()
 
 class BotCommand(Command):
     async def handle(self, c: Context):
-        for personality in config.bot.personalities:
-            msg = c.message.text
-            if msg and msg.lower().replace(",", "").startswith(personality.trigger):
+        msg = c.message.text
+        personalities = config.bot.personalities
+
+        if not msg:
+            return
+
+        cleaned_msg = msg.lower().replace(",", "")
+        if cleaned_msg.startswith("hey bot"):
+            cmd = cleaned_msg.split(" ", 2)[2]
+            if cmd == "list":
+                await c.reply("\n".join([f"{p.name}: {p.trigger}" for p in personalities]))
+                return
+
+        for personality in personalities:
+            if cleaned_msg.startswith(personality.trigger):
                 response = await relay_message_to_ollama(msg, personality.model, personality.instructions)
                 await c.start_typing()
                 await c.reply(response)
