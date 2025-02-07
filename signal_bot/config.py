@@ -30,9 +30,17 @@ class OllamaConfig(BaseModel):
     context: str = ""
 
 
+class ICDConfig(BaseModel):
+    base_url: str = "https://id.who.int/"
+    request_token_url: str = "https://icdaccessmanagement.who.int/connect/token"
+    client_id: str
+    client_secret: str
+
+
 class AppConfig(BaseConfig):
     bot: BotConfig
     signal: SignalConfig
     ollama: OllamaConfig
+    icd: ICDConfig
 
     CONFIG_SOURCES: ClassVar[list[ConfigSource]] = [FileSource(file="config.yml")]

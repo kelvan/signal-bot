@@ -2,6 +2,7 @@ from signalbot import Command, Context, SignalBot
 
 from .chat import relay_message_to_ollama
 from .config import AppConfig
+from .icd import fetch_icd_code_description
 
 config = AppConfig()
 
@@ -21,12 +22,37 @@ class BotCommand(Command):
                 await c.reply("\n".join([f"{p.name}: {p.trigger}" for p in personalities]))
                 return
 
+        if cleaned_msg.startswith("hey icd10"):
+            await c.start_typing()
+            try:
+                icd_code = cleaned_msg.split(" ", 3)[2].upper()
+                description = await fetch_icd_code_description(icd_code)
+                if len(splitted := cleaned_msg.split(" ", 3)) == 4:
+                    question = splitted[3]
+                else:
+                    question = "Tell me about yourself."
+                instructions = f"""
+                    You are a patient in a psychiatric hospital.
+                    Keep your responses short.
+                    {question}
+                    Do not mention your condition, just act like a person with the condition.
+                    You have a mental condition, you should act on, with the following description of your condition:
+                    {description}
+                """
+                response = await relay_message_to_ollama(msg, "llama3.2", instructions)
+                await c.reply(response)
+            finally:
+                await c.stop_typing()
+            return
+
         for personality in personalities:
             if cleaned_msg.startswith(personality.trigger):
-                response = await relay_message_to_ollama(msg, personality.model, personality.instructions)
                 await c.start_typing()
-                await c.reply(response)
-                await c.stop_typing()
+                try:
+                    response = await relay_message_to_ollama(msg, personality.model, personality.instructions)
+                    await c.reply(response)
+                finally:
+                    await c.stop_typing()
 
 
 if __name__ == "__main__":
