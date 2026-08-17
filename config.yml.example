@@ -5,6 +5,12 @@ signal:
 ollama:
   # optional
   host: "127.0.0.1:11434"
+  # optional, how long (seconds) to keep the model loaded after a request; -1 keeps it loaded forever
+  keep_alive: -1
+  # optional, whether to let thinking-capable models reason before answering
+  think: false
+  # optional, context window size passed to ollama
+  num_ctx: 2048
 
 # optional
 bot:

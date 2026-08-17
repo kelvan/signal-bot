@@ -28,6 +28,9 @@ class SignalConfig(BaseModel):
 class OllamaConfig(BaseModel):
     host: str = "127.0.0.1:11434"
     context: str = ""
+    keep_alive: int = -1
+    think: bool = False
+    num_ctx: int = 2048
 
 
 class ICDConfig(BaseModel):

@@ -13,6 +13,11 @@ async def relay_message_to_ollama(message: str, model: str, instructions: str = 
         "model": model,
         "prompt": f"{instructions}\n{message}",
         "stream": False,
+        "keep_alive": config.ollama.keep_alive,
+        "think": config.ollama.think,
+        "options": {
+            "num_ctx": config.ollama.num_ctx,
+        },
     }
     headers = {"Content-Type": "application/json"}
 
