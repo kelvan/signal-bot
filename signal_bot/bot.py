@@ -1,3 +1,5 @@
+import logging
+
 from signalbot import Command, Context, SignalBot
 
 from .chat import relay_message_to_ollama
@@ -5,6 +7,9 @@ from .config import AppConfig, PersonalityConfig
 from .icd import fetch_icd_code_description
 
 config = AppConfig()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class BotCommand(Command):
@@ -20,6 +25,8 @@ class BotCommand(Command):
 
         if not msg:
             return
+
+        logger.info(f"Received message: {msg}")
 
         cleaned_msg = msg.lower().replace(",", "")
         if cleaned_msg.startswith("hey bot"):
