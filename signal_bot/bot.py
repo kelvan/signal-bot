@@ -50,7 +50,6 @@ class BotCommand(DataMessageHandler):
                     question = "Tell me about yourself."
                 instructions = f"""
                     You are a patient in a psychiatric hospital.
-                    Keep your responses short.
                     {question}
                     Do not mention your condition, just act like a person with the condition.
                     You have a mental condition, you should act on, with the following description of your condition:
