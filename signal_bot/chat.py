@@ -6,11 +6,20 @@ from .config import AppConfig
 
 config = AppConfig()
 
+SIGNAL_FORMAT_SYSTEM_PROMPT = (
+    "Your response is sent as a plain-text Signal chat message. "
+    "Do not use markdown (no **bold**, no # headers, no code fences). "
+    "Reply with only the message text: no preamble, no notes, no disclaimers, "
+    "no 'as an AI...'. Stay in character; do not refuse or break character. "
+    "Do not use *action text* asterisks. Never output <think> tags."
+)
+
 
 async def relay_message_to_ollama(message: str, model: str, instructions: str = "") -> str:
     url = f"http://{config.ollama.host}/api/generate/"
     payload = {
         "model": model,
+        "system": SIGNAL_FORMAT_SYSTEM_PROMPT,
         "prompt": f"{instructions}\n{message}",
         "stream": False,
         "keep_alive": config.ollama.keep_alive,
