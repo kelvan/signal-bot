@@ -1,7 +1,7 @@
 from signalbot import Command, Context, SignalBot
 
 from .chat import relay_message_to_ollama
-from .config import AppConfig
+from .config import AppConfig, PersonalityConfig
 from .icd import fetch_icd_code_description
 
 config = AppConfig()
@@ -10,7 +10,13 @@ config = AppConfig()
 class BotCommand(Command):
     async def handle(self, c: Context):
         msg = c.message.text
-        personalities = config.bot.personalities
+        personalities = [
+            PersonalityConfig(
+                name="icd10",
+                trigger="hey icd10",
+            ),
+            *config.bot.personalities,
+        ]
 
         if not msg:
             return
