@@ -54,7 +54,7 @@ class BotCommand(Command):
                     You have a mental condition, you should act on, with the following description of your condition:
                     {description}
                 """
-                response = await relay_message_to_ollama(msg, "llama3.2", instructions)
+                response = await relay_message_to_ollama(msg, "qwen3.8", instructions)
                 await c.reply(response)
             finally:
                 await c.stop_typing()

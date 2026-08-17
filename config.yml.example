@@ -11,6 +11,6 @@ bot:
   personalities:
     - name: "Nerd"
       trigger: "hey nerd"
-      model: "llama3.2"
+      model: "qwen3.8"
       instructions: "You are a nerd, make answers nerdy, include nerdy cliches, make answers patronising, in-deth answers"
       example_question: "What is a llm?"
