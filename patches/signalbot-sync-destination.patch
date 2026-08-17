@@ -1,0 +1,43 @@
+# signalbot (as of 2.0.0) drops the destination_number/destination_uuid of
+# synced copies of messages we sent. Without them, source_or_group_id()
+# falls back to our own source, so replying to a trigger phrase in a message
+# we sent to someone else routes to Note to Self instead of that chat.
+# Adds destination_* fields and overrides source_or_group_id() to prefer
+# them, without touching source/source_number/source_uuid (still needed
+# untouched for reply()'s quote_author to resolve correctly).
+# Applied against signalbot/messages/data_message.py at container build time.
+--- dm_clean.py	2026-08-17 21:57:12.865541684 +0200
++++ dm_new_patched.py	2026-08-17 21:57:24.388258441 +0200
+@@ -35,6 +35,23 @@
+     text_styles: list[TextStyle] | None = None
+     timestamp: int
+     view_once: bool | None = None
++    # Patched: recipient of a synced copy of a message *we* sent, so replies
++    # can be routed to the actual chat instead of back to ourselves. None for
++    # plain incoming messages.
++    destination_number: str | None = None
++    destination_uuid: str | None = None
++
++    def source_or_group_id(self) -> str:
++        if self.group_info is not None and self.group_info.group_id is not None:
++            return self.group_info.group_id
++
++        if self.destination_uuid is not None:
++            return self.destination_uuid
++
++        if self.destination_number is not None:
++            return self.destination_number
++
++        return super().source_or_group_id()
+ 
+     @classmethod
+     async def _download_attachments(
+@@ -89,6 +106,8 @@
+             source_name=message_envelope.source_name,
+             source_number=message_envelope.source_number,
+             source_uuid=message_envelope.source_uuid,
++            destination_number=getattr(data_message, "destination_number", None),
++            destination_uuid=getattr(data_message, "destination_uuid", None),
+             group_info=group_info,
+             timestamp=timestamp,
+             attachments=attachments,
