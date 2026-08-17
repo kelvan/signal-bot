@@ -6,7 +6,7 @@ authors = [
     {name = "Florian Schweikert", email = "kelvan@ist-total.org"},
 ]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.14"
 dependencies = [
     "confz>=2.0.1",
     "signalbot>=0.10.1",
@@ -32,7 +32,7 @@ exclude = [
     "signal-cli-config",
 ]
 line-length = 120
-target-version = "py312"
+target-version = "py314"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "A", "B", "N", "UP", "T", "PL", "RUF", "I"]
@@ -41,7 +41,7 @@ per-file-ignores = {}
 mccabe.max-complexity = 10
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.14"
 warn_return_any = true
 warn_unused_configs = true
 show_error_codes = true

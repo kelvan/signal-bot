@@ -1,6 +1,6 @@
 import logging
 
-from signalbot import Command, Context, SignalBot
+from signalbot import Config, DataMessageContext, DataMessageHandler, SendMessage, SignalBot
 
 from .chat import relay_message_to_ollama
 from .config import AppConfig, PersonalityConfig
@@ -12,9 +12,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class BotCommand(Command):
-    async def handle(self, c: Context):
-        msg = c.message.text
+class BotCommand(DataMessageHandler):
+    async def handle_data_message(self, context: DataMessageContext) -> None:
+        msg = context.message.text
         personalities = [
             PersonalityConfig(
                 name="icd10",
@@ -32,13 +32,15 @@ class BotCommand(Command):
         if cleaned_msg.startswith("hey bot"):
             cmd = cleaned_msg.split(" ", 2)[2]
             if cmd == "list":
-                await c.reply(
-                    "\n".join([f"{p.name}: {p.trigger}" for p in personalities])
+                await context.reply(
+                    SendMessage(
+                        text="\n".join([f"{p.name}: {p.trigger}" for p in personalities])
+                    )
                 )
                 return
 
         if cleaned_msg.startswith("hey icd10"):
-            await c.start_typing()
+            await context.start_typing()
             try:
                 icd_code = cleaned_msg.split(" ", 3)[2].upper()
                 description = await fetch_icd_code_description(icd_code)
@@ -55,29 +57,29 @@ class BotCommand(Command):
                     {description}
                 """
                 response = await relay_message_to_ollama(msg, "qwen3.8", instructions)
-                await c.reply(response)
+                await context.reply(SendMessage(text=response))
             finally:
-                await c.stop_typing()
+                await context.stop_typing()
             return
 
         for personality in personalities:
             if cleaned_msg.startswith(personality.trigger):
-                await c.start_typing()
+                await context.start_typing()
                 try:
                     response = await relay_message_to_ollama(
                         msg, personality.model, personality.instructions
                     )
-                    await c.reply(response)
+                    await context.reply(SendMessage(text=response))
                 finally:
-                    await c.stop_typing()
+                    await context.stop_typing()
 
 
 if __name__ == "__main__":
     bot = SignalBot(
-        {
-            "signal_service": config.signal.service,
-            "phone_number": config.signal.number,
-        }
+        Config(
+            signal_service=config.signal.service,
+            phone_number=config.signal.number,
+        )
     )
     bot.register(BotCommand())
     bot.start()
