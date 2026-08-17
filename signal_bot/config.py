@@ -1,6 +1,6 @@
 from typing import ClassVar
 
-from confz import BaseConfig, ConfigSource, FileSource
+from confz import BaseConfig, ConfigSource, EnvSource, FileSource
 from pydantic import BaseModel
 
 
@@ -43,4 +43,7 @@ class AppConfig(BaseConfig):
     ollama: OllamaConfig
     icd: ICDConfig
 
-    CONFIG_SOURCES: ClassVar[list[ConfigSource]] = [FileSource(file="config.yml")]
+    CONFIG_SOURCES: ClassVar[list[ConfigSource]] = [
+        FileSource(file="config.yml"),
+        EnvSource(allow=["OLLAMA_HOST"], remap={"OLLAMA_HOST": "ollama.host"}),
+    ]
