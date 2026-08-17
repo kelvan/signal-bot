@@ -56,7 +56,7 @@ class BotCommand(DataMessageHandler):
                     You have a mental condition, you should act on, with the following description of your condition:
                     {description}
                 """
-                response = await relay_message_to_ollama(msg, "qwen3.8", instructions)
+                response = await relay_message_to_ollama(msg, "qwen3.5:4b", instructions)
                 await context.reply(SendMessage(text=response))
             finally:
                 await context.stop_typing()

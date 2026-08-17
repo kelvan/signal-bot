@@ -7,7 +7,7 @@ from pydantic import BaseModel
 class PersonalityConfig(BaseModel):
     trigger: str = "hey ollama"
     name: str = "Ollama"
-    model: str = "qwen3.8"
+    model: str = "qwen3.5:4b"
     instructions: str = """
         You are a Signal AI bot.
         You generate chat replies based on the prompt you receive.
