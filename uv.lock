@@ -397,7 +397,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "confz", specifier = ">=2.0.1" },
-    { name = "signalbot", specifier = ">=0.10.1" },
+    { name = "signalbot", specifier = "==2.0.0" },
 ]
 
 [[package]]
