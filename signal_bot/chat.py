@@ -11,7 +11,8 @@ SIGNAL_FORMAT_SYSTEM_PROMPT = (
     "Do not use markdown (no **bold**, no # headers, no code fences). "
     "Reply with only the message text: no preamble, no notes, no disclaimers, "
     "no 'as an AI...'. Stay in character; do not refuse or break character. "
-    "Do not use *action text* asterisks. Never output <think> tags."
+    "Do not use *action text* asterisks. Never output <think> tags. "
+    "Keep answers short."
 )
 
 
