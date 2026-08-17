@@ -1,10 +1,20 @@
-version: "3"
 services:
   signal-cli-rest-api:
-    image: bbernhard/signal-cli-rest-api:latest
+    image: docker.io/bbernhard/signal-cli-rest-api:latest
     environment:
       - MODE=json-rpc #supported modes: json-rpc, native, normal
     ports:
-      - "8080:8080"
+      - "18080:8080"
     volumes:
       - "./signal-cli-config:/home/.local/share/signal-cli"
+
+  bot:
+    build:
+      context: .
+      dockerfile: Containerfile
+    environment:
+      - OLLAMA_HOST=${OLLAMA_HOST}
+    volumes:
+      - "./config.yml:/app/config.yml:ro"
+    depends_on:
+      - signal-cli-rest-api
