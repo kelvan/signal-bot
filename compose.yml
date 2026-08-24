@@ -13,7 +13,7 @@ services:
       context: .
       dockerfile: Containerfile
     environment:
-      - OLLAMA_HOST=${OLLAMA_HOST}
+      - OLLAMA_HOST=${OLLAMA_HOST:-10.0.2.236:11434}
     volumes:
       - "./config.yml:/app/config.yml:ro"
     depends_on:
