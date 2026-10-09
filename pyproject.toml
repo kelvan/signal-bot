@@ -9,7 +9,7 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "confz>=2.0.1",
-    "signalbot==2.0.0",
+    "signalbot==2.1.0",
 ]
 
 [tool.ruff]
