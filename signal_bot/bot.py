@@ -12,6 +12,30 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def build_help(personalities: list[PersonalityConfig]) -> str:
+    lines = [
+        "Greetings! I am a chat bot powered by local LLMs.",
+        "This page shows what I can do and how to use me.",
+        "",
+        "Chat: start a message with a personality's trigger, followed by your question.",
+    ]
+    lines += [
+        f"- {p.name}: {p.trigger} {p.example_question}"
+        for p in personalities
+        if p.name != "icd10"
+    ]
+    lines += [
+        "",
+        "Medical roleplay:",
+        "- hey icd10 <ICD-10 code> [question]",
+        "",
+        "Commands:",
+        "- hey bot: show this help",
+        "- hey bot list: list personalities and triggers",
+    ]
+    return "\n".join(lines)
+
+
 class BotCommand(DataMessageHandler):
     async def handle_data_message(self, context: DataMessageContext) -> None:
         msg = context.message.text
@@ -29,15 +53,17 @@ class BotCommand(DataMessageHandler):
         logger.info(f"Received message: {msg}")
 
         cleaned_msg = msg.lower().replace(",", "")
-        if cleaned_msg.startswith("hey bot"):
-            cmd = cleaned_msg.split(" ", 2)[2]
+        if cleaned_msg == "hey bot" or cleaned_msg.startswith("hey bot "):
+            cmd = cleaned_msg.removeprefix("hey bot").strip()
             if cmd == "list":
                 await context.reply(
                     SendMessage(
                         text="\n".join([f"{p.name}: {p.trigger}" for p in personalities])
                     )
                 )
-                return
+            else:
+                await context.reply(SendMessage(text=build_help(personalities)))
+            return
 
         if cleaned_msg.startswith("hey icd10"):
             await context.start_typing()
