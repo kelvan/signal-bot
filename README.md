@@ -1,8 +1,6 @@
 # LLM Signal Bot
 
-> The LLM Signal Bot is an advanced chatbot designed to interact with users on the Signal messaging platform. Utilizing the `ollama` language model, this bot can understand and generate human-like text responses, making conversations more engaging and informative. The bot leverages the `signal-cli-rest-api` to communicate with Signal, ensuring seamless message handling and response delivery.
-
-> — GitHub Copilot
+A chatbot for the Signal messenger. It answers messages with local LLMs served by [Ollama](https://github.com/ollama/ollama) and talks to Signal through `signal-cli-rest-api`. Each personality has its own trigger phrase, model and instructions. Send `hey bot` to get a help page.
 
 ## Prerequisites
 
