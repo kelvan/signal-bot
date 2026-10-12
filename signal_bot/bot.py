@@ -2,7 +2,7 @@ import logging
 
 from signalbot import Config, DataMessageContext, DataMessageHandler, SendMessage, SignalBot
 
-from .chat import relay_message_to_ollama
+from .chat import relay_message_to_llm
 from .config import AppConfig, PersonalityConfig
 from .icd import fetch_icd_code_description
 
@@ -81,7 +81,7 @@ class BotCommand(DataMessageHandler):
                     You have a mental condition, you should act on, with the following description of your condition:
                     {description}
                 """
-                response = await relay_message_to_ollama(msg, "qwen3.5:4b", instructions)
+                response = await relay_message_to_llm(msg, "qwen3.5:4b", instructions)
                 await context.reply(SendMessage(text=response))
             finally:
                 await context.stop_typing()
@@ -91,7 +91,7 @@ class BotCommand(DataMessageHandler):
             if cleaned_msg.startswith(personality.trigger):
                 await context.start_typing()
                 try:
-                    response = await relay_message_to_ollama(
+                    response = await relay_message_to_llm(
                         msg, personality.model, personality.instructions
                     )
                     await context.reply(SendMessage(text=response))

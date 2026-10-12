@@ -1,12 +1,12 @@
 # LLM Signal Bot
 
-A chatbot for the Signal messenger. It answers messages with local LLMs served by [Ollama](https://github.com/ollama/ollama) and talks to Signal through `signal-cli-rest-api`. Each personality has its own trigger phrase, model and instructions. Send `hey bot` to get a help page.
+A chatbot for the Signal messenger. It answers messages with LLMs served by [Ollama](https://github.com/ollama/ollama) or any OpenAI-compatible server and talks to Signal through `signal-cli-rest-api`. Each personality has its own trigger phrase, model and instructions. Send `hey bot` to get a help page.
 
 ## Prerequisites
 
 - Python 3.12 or higher
 - `signal-cli-rest-api`
-- `ollama`
+- `ollama` or any OpenAI-compatible server (llama.cpp, vLLM, LM Studio, ...)
 
 ## Setup
 
@@ -21,9 +21,20 @@ A chatbot for the Signal messenger. It answers messages with local LLMs served b
 
     Follow the instructions in the [signal-cli-rest-api repository](https://github.com/bbernhard/signal-cli-rest-api) to set up the API.
 
-4. **Set Up `ollama`**
+4. **Set Up the LLM Server**
 
     Follow the instructions in the [ollama repository](https://github.com/ollama/ollama) to set up the service.
+
+    To use an OpenAI-compatible server instead, set the backend in `config.yml`. `model` in each personality is the model name of that server.
+
+    ```yaml
+    llm:
+      backend: "openai"
+
+    openai:
+      base_url: "http://127.0.0.1:8000/v1"
+      api_key: ""  # optional
+    ```
 
 5. **Create config file**
 

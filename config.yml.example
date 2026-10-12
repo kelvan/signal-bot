@@ -2,6 +2,12 @@
 signal:
   number: "+<your phone number>"
 
+# optional, "ollama" (default) or "openai" for any OpenAI-compatible server
+# (llama.cpp, vLLM, LM Studio, ...)
+llm:
+  backend: "ollama"
+
+# only used with the ollama backend
 ollama:
   # optional
   host: "127.0.0.1:11434"
@@ -11,6 +17,12 @@ ollama:
   think: false
   # optional, context window size passed to ollama
   num_ctx: 2048
+
+# only used with the openai backend
+openai:
+  base_url: "http://127.0.0.1:8000/v1"
+  # optional
+  api_key: ""
 
 # optional
 bot:

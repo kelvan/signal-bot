@@ -1,4 +1,4 @@
-from typing import ClassVar
+from typing import ClassVar, Literal
 
 from confz import BaseConfig, ConfigSource, EnvSource, FileSource
 from pydantic import BaseModel
@@ -33,6 +33,15 @@ class OllamaConfig(BaseModel):
     num_ctx: int = 2048
 
 
+class OpenAIConfig(BaseModel):
+    base_url: str = "http://127.0.0.1:8000/v1"
+    api_key: str = ""
+
+
+class LLMConfig(BaseModel):
+    backend: Literal["ollama", "openai"] = "ollama"
+
+
 class ICDConfig(BaseModel):
     base_url: str = "https://id.who.int/"
     request_token_url: str = "https://icdaccessmanagement.who.int/connect/token"
@@ -43,7 +52,9 @@ class ICDConfig(BaseModel):
 class AppConfig(BaseConfig):
     bot: BotConfig
     signal: SignalConfig
-    ollama: OllamaConfig
+    ollama: OllamaConfig = OllamaConfig()
+    llm: LLMConfig = LLMConfig()
+    openai: OpenAIConfig = OpenAIConfig()
     icd: ICDConfig
 
     CONFIG_SOURCES: ClassVar[list[ConfigSource]] = [

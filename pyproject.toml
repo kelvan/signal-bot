@@ -1,7 +1,7 @@
 [project]
 name = "signal-bot"
 version = "0.1.0"
-description = "Simple bot connecting signal to an ollama chatbot"
+description = "Simple bot connecting signal to an LLM chatbot"
 authors = [
     {name = "Florian Schweikert", email = "kelvan@ist-total.org"},
 ]
