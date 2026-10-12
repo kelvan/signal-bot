@@ -92,7 +92,10 @@ class BotCommand(DataMessageHandler):
                 await context.start_typing()
                 try:
                     response = await relay_message_to_llm(
-                        msg, personality.model, personality.instructions
+                        msg,
+                        personality.model,
+                        personality.instructions,
+                        personality.temperature,
                     )
                     await context.reply(SendMessage(text=response))
                 finally:

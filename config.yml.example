@@ -6,6 +6,8 @@ signal:
 # (llama.cpp, vLLM, LM Studio, ...)
 llm:
   backend: "ollama"
+  # optional, default sampling temperature, the server default is used if unset
+  temperature: 0.8
 
 # only used with the ollama backend
 ollama:
@@ -31,4 +33,6 @@ bot:
       trigger: "hey nerd"
       model: "qwen3.5:4b"
       instructions: "You are a nerd, make answers nerdy, include nerdy cliches, make answers patronising, in-deth answers"
+      # optional, overrides llm.temperature
+      temperature: 0.5
       example_question: "What is a llm?"

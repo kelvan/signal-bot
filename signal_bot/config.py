@@ -8,6 +8,7 @@ class PersonalityConfig(BaseModel):
     trigger: str = "hey ollama"
     name: str = "Ollama"
     model: str = "gemma4:e2b"
+    temperature: float | None = None
     instructions: str = """
         You are a Signal AI bot.
         You generate chat replies based on the prompt you receive.
@@ -40,6 +41,7 @@ class OpenAIConfig(BaseModel):
 
 class LLMConfig(BaseModel):
     backend: Literal["ollama", "openai"] = "ollama"
+    temperature: float | None = None
 
 
 class ICDConfig(BaseModel):
