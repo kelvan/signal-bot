@@ -96,6 +96,7 @@ class BotCommand(DataMessageHandler):
                         personality.model,
                         personality.instructions,
                         personality.temperature,
+                        personality.trigger,
                     )
                     await context.reply(SendMessage(text=response))
                 finally:

@@ -4,6 +4,7 @@ from typing import cast
 import aiohttp
 
 from .config import AppConfig
+from .language import detect_language_name
 
 config = AppConfig()
 
@@ -70,10 +71,25 @@ async def _generate_openai(prompt: str, model: str, temperature: float | None) -
     return THINK_TAGS.sub("", content).strip()
 
 
-async def relay_message_to_llm(
-    message: str, model: str, instructions: str = "", temperature: float | None = None
-) -> str:
+def build_prompt(message: str, instructions: str, trigger: str) -> str:
     prompt = f"{instructions}\n{message}"
+    content = message.lower().removeprefix(trigger.lower()) if trigger else message
+    if language := detect_language_name(content.lstrip(" ,:;.!?")):
+        prompt += (
+            f"\n\n(Answer in {language}, "
+            "unless your character instructions name another language or dialect.)"
+        )
+    return prompt
+
+
+async def relay_message_to_llm(
+    message: str,
+    model: str,
+    instructions: str = "",
+    temperature: float | None = None,
+    trigger: str = "",
+) -> str:
+    prompt = build_prompt(message, instructions, trigger)
     if temperature is None:
         temperature = config.llm.temperature
     if config.llm.backend == "openai":
@@ -93,6 +109,7 @@ if __name__ == "__main__":
                 personality.model,
                 personality.instructions,
                 personality.temperature,
+                personality.trigger,
             )
         )
         print(f"{personality.name}: {response}\n{'#' * 80}\n")  # noqa: T201

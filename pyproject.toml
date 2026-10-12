@@ -9,6 +9,7 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "confz>=2.0.1",
+    "lingua-language-detector>=2.2.0",
     "signalbot==2.1.0",
 ]
 
